@@ -85,7 +85,8 @@ class Ball {
         this.y += this.vely;
     }
 
-    //méthode qui permet de détecter les collisions entre les balles
+    //*méthode qui permet de détecter les collisions entre les balles
+
     collisionDetection() {
         //on parcours toute les balls du tableau
         for (const ball of balls) {
@@ -93,7 +94,7 @@ class Ball {
             if (this !== ball) { //si ce n'est pas la même balle
                 const dx = this.x - ball.x; //diffèrence de position x
                 const dy = this.y - ball.y; //diffèrence de position y
-                const distance = Math.sqrt(dx + dx + dy + dy); //ditance entre les deux balles
+                const distance = Math.sqrt(dx * dx + dy * dy); //ditance entre les deux balles
 
                 if (distance < this.size + ball.size) { //si les balles se touchent
                     //on inverse les vitesses
@@ -108,3 +109,59 @@ class Ball {
         }
     }
 }
+
+//on crée un tableau vide pour stocker les balles
+
+const balls = [];
+
+//on crée une boucle pour générer un nombre de balles définit
+
+while (balls.length < 20) {
+    // on définit deux constantes6986fc7121c446df09457cb2851105da.txt
+    const size = random(10, 20);//taille de la balle
+    const vitesseX = random(-2, 3); //vitesse de la balle horizontale
+    const vitesseY = random(-1, 4); //vitesse de la balle verticale
+
+    //on va instancie une balle et on lui donne ses paramètres
+
+    const ball = new Ball(  // new Class Ball (avec une majuscule qui définitq que c'est une classe)
+        //position x de la balle
+        random(size, width - size),
+        //position y de la ball
+        random(size, height - size),
+        //vitesse horizontale
+        vitesseX === 0 ? 1 : vitesseX, //si vitesse x = 0 alors on lui donne 1 sinon ce sera vitesse x
+        //vitesse verticale
+        vitesseY === 0 ? 1 : vitesseY,
+        //couleur de la balle
+        randomColor(),
+        size
+    );
+    //on ajoute la ball au tableau
+    balls.push(ball);
+}
+
+console.log(balls);
+
+//fonction qui permet de dessiner le canvas
+function loop() {
+    //on définit la couleur du fond du canvas
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    //on définit (dessine) le cadre du canvas
+    ctx.fillRect(0, 0, width, height); //position x,positiony, largeur, hauteur
+
+    //on parcours les balles du tableau
+
+    for (const ball of balls) {
+        //on dessine la ballee),
+        //position y de la ball
+        ball.draw();
+        //on met à jour la direction de la balle
+        ball.update();
+        //on détecte les collisions
+        ball.collisionDetection();
+    }
+    //on appelle la fonction loop à chaque frame
+    requestAnimationFrame(loop);
+}
+loop();
